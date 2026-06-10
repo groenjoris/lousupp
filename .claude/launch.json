@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "lousupp-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "/Users/jorisgroen/Code/lousupp wireframe/lousupp-site",
+      "port": 3000
+    }
+  ]
+}

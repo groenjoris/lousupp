@@ -1,0 +1,42 @@
+/* ============================================================
+   TYPOGRAPHY
+   ============================================================ */
+
+:root {
+  /* ---- families ---- */
+  --font-wf-display: 'Caveat', 'Shantell Sans', ui-rounded, cursive;   /* big expressive titles */
+  --font-wf-hand:    'Shantell Sans', 'Comic Sans MS', system-ui, cursive; /* readable handwritten body & buttons */
+  --font-cms-sans:   'IBM Plex Sans', system-ui, -apple-system, sans-serif; /* CMS chrome */
+  --font-cms-mono:   'IBM Plex Mono', ui-monospace, monospace;             /* CMS values / metadata */
+
+  /* ---- WIREFRAME type scale (landing-page scale, big) ---- */
+  --wf-display:    clamp(3rem, 6vw, 5.5rem);   /* @kind font */ /* chapter hero title */
+  --wf-h1:         clamp(2.4rem, 4.5vw, 4rem); /* @kind font */
+  --wf-h2:         clamp(1.9rem, 3vw, 2.8rem); /* @kind font */
+  --wf-h3:         1.6rem;                     /* @kind font */
+  --wf-lead:       clamp(1.25rem, 1.6vw, 1.6rem); /* @kind font */ /* intro paragraph */
+  --wf-body:       1.2rem;                         /* @kind font */ /* paragraph */
+  --wf-caption:    1rem;                           /* @kind font */ /* small hand note */
+
+  --wf-lh-display: 0.95;  /* @kind other */
+  --wf-lh-head:    1.04;  /* @kind other */
+  --wf-lh-body:    1.55;  /* @kind other */
+
+  --wf-weight-body:    400;
+  --wf-weight-strong:  600;
+  --wf-weight-display: 700;
+
+  /* ---- CMS type scale (compact UI) ---- */
+  --cms-title:   15px;   /* @kind font */ /* panel title */
+  --cms-label:   13px;   /* @kind font */ /* field labels */
+  --cms-body:    13px;   /* @kind font */ /* control text */
+  --cms-meta:    12px;   /* @kind font */ /* hints / values */
+  --cms-tiny:    11px;   /* @kind font */ /* uppercase eyebrow */
+
+  --cms-lh:      1.45;          /* @kind other */
+  --cms-track-eyebrow: 0.08em;  /* @kind other */ /* letterspacing for tiny caps */
+
+  --cms-weight-regular: 400;
+  --cms-weight-medium:  500;
+  --cms-weight-semibold:600;
+}

@@ -1,0 +1,75 @@
+/* ============================================================
+   INTERACTIONS & PATTERNS
+   Hover / press / focus states that can't live in inline styles.
+   Covers both the wireframe (.wf-*) and CMS (.cms-*) worlds.
+   ============================================================ */
+
+/* ---------- WIREFRAME ---------- */
+
+.wf-btn { -webkit-tap-highlight-color: transparent; }
+.wf-btn:hover  { transform: translateY(-1px); }
+.wf-btn:active { transform: translateY(1px); }
+
+.wf-btn--ghost { padding-left: 4px; padding-right: 4px; }
+.wf-btn--ghost:hover { text-decoration-color: var(--wf-ink) !important; }
+
+.wf-btn:focus-visible {
+  outline: 2px dashed var(--wf-ink-soft);
+  outline-offset: 4px;
+}
+.wf-btn:disabled,
+.wf-btn[aria-disabled="true"] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* a faint hover lift on interactive sketched panels */
+.wf-sketch--interactive { cursor: pointer; transition: transform var(--wf-dur) var(--wf-ease); }
+.wf-sketch--interactive:hover { transform: translateY(-2px); }
+
+/* ---------- CMS ---------- */
+
+.cms-btn {
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--cms-dur) var(--cms-ease),
+              border-color var(--cms-dur) var(--cms-ease),
+              color var(--cms-dur) var(--cms-ease);
+}
+.cms-btn--solid:hover   { background: var(--cms-solid-hover); }
+.cms-btn--solid:active  { background: #14171b; }
+.cms-btn--soft:hover    { background: var(--cms-surface-2); }
+.cms-btn--soft:active   { background: var(--cms-border); }
+.cms-btn--ghost:hover   { background: var(--cms-surface); }
+.cms-btn--ghost:active  { background: var(--cms-surface-2); }
+.cms-btn:disabled       { opacity: 0.45; cursor: not-allowed; }
+
+.cms-iconbtn { transition: background var(--cms-dur) var(--cms-ease), color var(--cms-dur) var(--cms-ease); }
+.cms-iconbtn:hover  { background: var(--cms-surface-2); color: var(--cms-ink); }
+.cms-iconbtn:active { background: var(--cms-border); }
+.cms-iconbtn[data-active="true"] { background: var(--cms-ink); color: var(--cms-on-solid); }
+
+.cms-field {
+  transition: border-color var(--cms-dur) var(--cms-ease), box-shadow var(--cms-dur) var(--cms-ease);
+}
+.cms-field:hover { border-color: var(--cms-border-strong); }
+.cms-field:focus,
+.cms-field:focus-within {
+  border-color: var(--cms-accent);
+  box-shadow: var(--cms-ring);
+  outline: none;
+}
+.cms-field::placeholder { color: var(--cms-ink-faint); }
+
+/* segmented control */
+.cms-seg-opt { transition: color var(--cms-dur) var(--cms-ease); }
+.cms-seg-opt:hover { color: var(--cms-ink); }
+
+/* the in-chapter edit trigger: quiet until you approach the chapter */
+.wf-edit-trigger {
+  transition: opacity var(--cms-dur) var(--cms-ease),
+              transform var(--cms-dur) var(--cms-ease),
+              background var(--cms-dur) var(--cms-ease);
+}
+.wf-edit-trigger:hover { transform: translateY(-1px); background: var(--cms-canvas); }
+.wf-edit-trigger:active { transform: translateY(0); }

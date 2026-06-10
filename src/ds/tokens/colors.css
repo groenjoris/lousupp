@@ -1,0 +1,63 @@
+/* ============================================================
+   COLORS
+   Two palettes living in one system.
+
+   1) WIREFRAME — paper + graphite. The world of the sketch.
+      Warm near-whites for "paper", a graphite ramp for pencil
+      ink. No saturated color at all: a wireframe is colourless
+      on purpose so the structure speaks.
+
+   2) CMS — cool neutral greys for the editing chrome that sits
+      ON TOP of the sketch. Crisp, flat, software-grey. One
+      restrained blue reserved for focus/selection only.
+   ============================================================ */
+
+:root {
+  /* ---- WIREFRAME · paper (surfaces) ---- */
+  --paper-0:    #fcfcfa;   /* the page itself, warm white */
+  --paper-1:    #f7f6f2;   /* raised paper / inset fill */
+  --paper-2:    #f0eee8;   /* pressed / hover fill */
+  --paper-edge: #e7e4dc;   /* faint paper shadow */
+
+  /* ---- WIREFRAME · graphite (pencil ink ramp) ---- */
+  --graphite-900: #2c2b29;  /* darkest pencil press */
+  --graphite-700: #46443f;  /* primary ink */
+  --graphite-500: #726f67;  /* secondary ink */
+  --graphite-400: #949086;  /* muted strokes */
+  --graphite-300: #b6b2a8;  /* light strokes */
+  --graphite-200: #d3cfc5;  /* hairlines */
+  --graphite-100: #e6e2d8;  /* ghost strokes */
+
+  /* ---- WIREFRAME · semantic aliases ---- */
+  --wf-paper:        var(--paper-0);
+  --wf-paper-raised: var(--paper-1);
+  --wf-fill-hover:   var(--paper-2);
+  --wf-ink:          var(--graphite-700);  /* body text & lines */
+  --wf-ink-strong:   var(--graphite-900);  /* headings */
+  --wf-ink-soft:     var(--graphite-500);  /* captions / meta */
+  --wf-ink-faint:    var(--graphite-400);  /* placeholder hand */
+  --wf-line:         var(--graphite-700);  /* drawn stroke */
+  --wf-line-soft:    var(--graphite-300);  /* light stroke */
+  --wf-line-ghost:   var(--graphite-200);  /* hatching */
+
+  /* ============================================================
+     CMS — editing chrome
+     ============================================================ */
+  --cms-canvas:      #ffffff;  /* panel background */
+  --cms-surface:     #f6f7f8;  /* inset field / rail */
+  --cms-surface-2:   #eef0f2;  /* hover row */
+  --cms-border:      #e2e5e8;  /* dividers / field borders */
+  --cms-border-strong:#cdd2d7; /* active field border */
+
+  --cms-ink:         #1c1f23;  /* primary label text */
+  --cms-ink-soft:    #5b626b;  /* secondary text */
+  --cms-ink-faint:   #98a0a8;  /* placeholder / hints */
+
+  --cms-solid:       #23262b;  /* primary button / active fill */
+  --cms-solid-hover: #34383e;
+  --cms-on-solid:    #ffffff;
+
+  /* one reserved accent — focus rings & active selection only */
+  --cms-accent:      #3b6cff;
+  --cms-accent-soft: #e8efff;
+}

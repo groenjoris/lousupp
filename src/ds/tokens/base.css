@@ -1,0 +1,38 @@
+/* ============================================================
+   BASE — minimal reset + the paper surface
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--font-wf-hand);
+  font-size: var(--wf-body);
+  line-height: var(--wf-lh-body);
+  color: var(--wf-ink);
+  background-color: var(--wf-paper);
+  background-image: var(--wf-paper-grain);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The CMS chrome opts back into the crisp sans world. Wrap any
+   editing UI in .cms to flip fonts/colours locally.            */
+.cms {
+  font-family: var(--font-cms-sans);
+  font-size: var(--cms-body);
+  line-height: var(--cms-lh);
+  color: var(--cms-ink);
+  letter-spacing: -0.005em;
+}
+
+/* shared focus treatment for the CMS world */
+.cms :focus-visible {
+  outline: none;
+  box-shadow: var(--cms-ring);
+  border-color: var(--cms-accent);
+}
+
+::selection { background: rgba(59, 108, 255, 0.16); }
