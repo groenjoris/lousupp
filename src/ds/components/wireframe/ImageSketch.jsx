@@ -63,7 +63,7 @@ export function ImageSketch({
       {...rest}
     >
       {frame && (
-        <SketchFrame radius={18} stroke={1.5} color="var(--wf-line-soft)" fill="transparent" roughness={3} seed={seed} />
+        <SketchFrame radius={18} stroke={1.5} color="var(--wf-line-ghost)" fill="transparent" roughness={3} seed={seed} />
       )}
       {hasImage ? (
         children
@@ -78,7 +78,7 @@ export function ImageSketch({
               width: '88%',
               height: '84%',
               zIndex: 1,
-              color: 'var(--wf-line-soft)',
+              color: 'var(--wf-line-ghost)',
             }}
             aria-hidden="true"
           >

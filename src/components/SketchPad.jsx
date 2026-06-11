@@ -6,7 +6,7 @@ import { CmsPanel, CmsButton, CmsIcon, CmsSegmented, CmsField, CmsToggle } from 
 // Drawing coordinate space (also the SVG viewBox used when rendering on the page).
 export const PAD_W = 640;
 export const PAD_H = 480;
-export const STROKE = '#726f67';   // grey graphite — no colour choice needed
+export const STROKE = '#d3cfc5';   // light grey graphite — no colour choice needed
 export const STROKE_W = 3;
 
 // Placeholder presets (the motif gesture shown when nothing is drawn).
