@@ -16,16 +16,27 @@ import { makeSeed } from './seed.js';
 const HISTORY_CAP = 30;
 const KEY = 'site';
 
-const useKv = !!process.env.KV_REST_API_URL;
+// Works with either the Vercel-KV style vars or the Upstash marketplace vars.
+const KV_URL = process.env.KV_REST_API_URL || process.env.UPSTASH_REDIS_REST_URL;
+const KV_TOKEN = process.env.KV_REST_API_TOKEN || process.env.UPSTASH_REDIS_REST_TOKEN;
+const useKv = !!KV_URL;
 
 /* ---------------- backends ---------------- */
 
+let _kv;
+async function kvClient() {
+  if (!_kv) {
+    const { createClient } = await import('@vercel/kv');
+    _kv = createClient({ url: KV_URL, token: KV_TOKEN });
+  }
+  return _kv;
+}
 async function kvRead() {
-  const { kv } = await import('@vercel/kv');
+  const kv = await kvClient();
   return (await kv.get(KEY)) || null;
 }
 async function kvWrite(doc) {
-  const { kv } = await import('@vercel/kv');
+  const kv = await kvClient();
   await kv.set(KEY, doc);
   return doc;
 }
