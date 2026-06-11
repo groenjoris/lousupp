@@ -503,6 +503,7 @@ export default function Editor({ initialSite, initialUnlocked }) {
           const effLayout = c.showImage ? layout : 'text-only';
 
           const hasSketch = c.sketch && Array.isArray(c.sketch.strokes) && c.sketch.strokes.length > 0;
+          const showSketch = hasSketch && !c.sketchHidden;
           const image = c.showImage ? (
             <div style={{ position: 'relative' }}>
               <ImageSketch
@@ -512,7 +513,7 @@ export default function Editor({ initialSite, initialUnlocked }) {
                 frame={c.showFrame}
                 seed={(i % 2) + 1}
               >
-                {hasSketch ? <SketchSvg sketch={c.sketch} /> : null}
+                {showSketch ? <SketchSvg sketch={c.sketch} /> : null}
               </ImageSketch>
               {unlocked && (
                 <div className="cms" style={{ position: 'absolute', bottom: 24, right: 24, zIndex: 5 }}>

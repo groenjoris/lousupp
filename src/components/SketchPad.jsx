@@ -81,7 +81,8 @@ export function SketchPad({ chapter, onChange, onCommit, onCancel }) {
 
   const commit = () => {
     const strokes = strokesRef.current.filter((s) => s.length > 0);
-    onChange({ sketch: strokes.length ? { strokes: strokes.map((s) => s.map((p) => [...p])) } : null });
+    // Drawing always becomes the active image (un-hide the sketch).
+    onChange({ sketch: strokes.length ? { strokes: strokes.map((s) => s.map((p) => [...p])) } : null, sketchHidden: false });
   };
 
   function toLocal(e) {
@@ -112,6 +113,7 @@ export function SketchPad({ chapter, onChange, onCommit, onCancel }) {
   const cancel = () => { onChange(snapshot.current); onCancel(); };
 
   const count = strokesRef.current.length;
+  const hasDrawing = chapter.sketch && Array.isArray(chapter.sketch.strokes) && chapter.sketch.strokes.length > 0;
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 70, display: 'grid', placeItems: 'center', background: 'rgba(28,31,35,0.28)' }} onClick={cancel}>
@@ -155,11 +157,19 @@ export function SketchPad({ chapter, onChange, onCommit, onCancel }) {
             }}
           />
           <span style={{ font: 'var(--cms-weight-regular) var(--cms-meta)/1.3 var(--font-cms-sans)', color: 'var(--cms-ink-faint)' }}>
-            Grey pencil stroke. A drawing replaces the preset. Reset clears the canvas; Cancel keeps the previous drawing.
+            Grey pencil stroke. Drawing shows your sketch; pick a Preset to show that placeholder instead (your drawing is kept). Reset clears the canvas; Cancel keeps the previous drawing.
           </span>
 
           {/* Settings below the sketcher */}
-          <CmsSegmented label="Preset" options={PRESETS} value={chapter.motif} onChange={(v) => onChange({ motif: v })} />
+          {hasDrawing && (
+            <CmsSegmented
+              label="Show as image"
+              options={[{ value: 'drawing', label: 'My drawing' }, { value: 'preset', label: 'Preset' }]}
+              value={chapter.sketchHidden ? 'preset' : 'drawing'}
+              onChange={(v) => onChange({ sketchHidden: v === 'preset' })}
+            />
+          )}
+          <CmsSegmented label="Preset" options={PRESETS} value={chapter.motif} onChange={(v) => onChange({ motif: v, sketchHidden: true })} />
           <CmsSegmented iconsOnly label="Image position" options={POSITIONS} value={imgLayout(chapter)} onChange={(v) => onChange({ template: v })} />
           {(imgLayout(chapter) === 'image-left' || imgLayout(chapter) === 'image-right') && (
             <CmsSegmented label="Image width" options={[{ value: 'half', label: 'Half' }, { value: 'two-thirds', label: 'Two-thirds' }]} value={chapter.imageWidth} onChange={(v) => onChange({ imageWidth: v })} />
