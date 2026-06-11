@@ -586,6 +586,8 @@ export default function Editor({ initialSite, initialUnlocked }) {
                 </div>
               }
             >
+              <CmsField label="Eyebrow" value={current.eyebrow || ''} onChange={(e) => update(current.id, { eyebrow: e.target.value })} placeholder="small line above the title" hint="Optional — a quiet label above the title." />
+
               <CmsField label="Title" value={current.title} onChange={(e) => update(current.id, { title: e.target.value })} placeholder="Chapter title" />
               <FieldHistory history={current.titleHistory} onRestore={(v) => update(current.id, { title: v })} />
 
