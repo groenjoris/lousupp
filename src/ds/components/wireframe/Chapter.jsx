@@ -23,6 +23,7 @@ export function Chapter({
 }) {
   const sideBySide = layout === 'image-right' || layout === 'image-left';
   const imageFirst = layout === 'image-left';
+  const centered = layout === 'text-only' || layout === 'image-below';
 
   let columns = '1fr';
   if (sideBySide) {
@@ -49,7 +50,7 @@ export function Chapter({
         <div style={{ justifySelf: 'end' }}>{toolbar}</div>
       )}
       {actions && (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)', marginTop: 'var(--space-2)', justifyContent: centered ? 'center' : 'flex-start' }}>
           {actions}
         </div>
       )}
