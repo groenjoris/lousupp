@@ -68,41 +68,39 @@ export function ImageSketch({
       {hasImage ? (
         children
       ) : (
-        <>
-          <svg
-            viewBox="0 0 500 230"
-            preserveAspectRatio="xMidYMid meet"
-            style={{
-              position: 'absolute',
-              inset: '8% 6%',
-              width: '88%',
-              height: '84%',
-              zIndex: 1,
-              color: 'var(--wf-line-ghost)',
-            }}
-            aria-hidden="true"
-          >
-            {MOTIFS[motif] || MOTIFS.abstract}
-          </svg>
-          {caption && (
-            <figcaption style={{
-              position: 'relative',
-              zIndex: 2,
-              marginTop: 'auto',
-              alignSelf: 'end',
-              justifySelf: 'start',
-              padding: '6px 12px',
-              font: `500 var(--wf-caption)/1.3 var(--font-wf-hand)`,
-              color: 'var(--wf-ink-soft)',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-            }}>
-              <span aria-hidden="true" style={{ fontSize: '1.1em' }}>✎</span>
-              {caption}
-            </figcaption>
-          )}
-        </>
+        <svg
+          viewBox="0 0 500 230"
+          preserveAspectRatio="xMidYMid meet"
+          style={{
+            position: 'absolute',
+            inset: '8% 6%',
+            width: '88%',
+            height: '84%',
+            zIndex: 1,
+            color: 'var(--wf-line-ghost)',
+          }}
+          aria-hidden="true"
+        >
+          {MOTIFS[motif] || MOTIFS.abstract}
+        </svg>
+      )}
+      {/* image note — shown for both the motif placeholder and a custom drawing */}
+      {caption && (
+        <figcaption style={{
+          position: 'absolute',
+          left: 0,
+          bottom: 0,
+          zIndex: 2,
+          padding: '6px 12px',
+          font: `500 var(--wf-caption)/1.3 var(--font-wf-hand)`,
+          color: 'var(--wf-ink-soft)',
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '6px',
+        }}>
+          <span aria-hidden="true" style={{ fontSize: '1.1em' }}>✎</span>
+          {caption}
+        </figcaption>
       )}
     </figure>
   );
