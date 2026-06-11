@@ -41,5 +41,5 @@
   --chapter-min-h: auto;       /* @kind other */ /* compact: a chapter is only as tall as its content */
   --page-max:      1180px;     /* @kind spacing */ /* content column for a chapter */
   --page-gutter:   clamp(24px, 5vw, 80px); /* @kind spacing */
-  --chapter-gap:   25px; /* @kind spacing */ /* 25px top + 25px bottom → 50px between blocks */
+  --chapter-gap:   50px; /* @kind spacing */ /* 50px top + 50px bottom per chapter */
 }
