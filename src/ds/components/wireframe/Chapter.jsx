@@ -83,19 +83,21 @@ export function Chapter({
       </div>
     );
   } else {
-    // side-by-side
-    const cols = [
-      <div key="t">{TextBlock}</div>,
-      <div key="i">{image}</div>,
-    ];
+    // side-by-side. DOM order is always text→image; for image-left, CSS `order`
+    // puts the image on the left on desktop. On mobile it collapses to a single
+    // column with text first (see chapter responsive CSS in base.css).
     inner = (
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: columns,
-        gap: 'clamp(28px, 5vw, 80px)',
-        alignItems: align,
-      }}>
-        {imageFirst ? [cols[1], cols[0]] : cols}
+      <div
+        className={`wf-cols${imageFirst ? ' wf-cols--image-first' : ''}`}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: columns,
+          gap: 'clamp(28px, 5vw, 80px)',
+          alignItems: align,
+        }}
+      >
+        <div className="wf-col-text">{TextBlock}</div>
+        <div className="wf-col-img">{image}</div>
       </div>
     );
   }

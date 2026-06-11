@@ -505,23 +505,21 @@ export default function Editor({ initialSite, initialUnlocked }) {
           const hasSketch = c.sketch && Array.isArray(c.sketch.strokes) && c.sketch.strokes.length > 0;
           const showSketch = hasSketch && !c.sketchHidden;
           const image = c.showImage ? (
-            <div style={{ position: 'relative' }}>
-              <ImageSketch
-                motif={c.motif}
-                aspect={layout === 'image-full' ? '21 / 9' : '4 / 3'}
-                caption={c.caption}
-                frame={c.showFrame}
-                seed={(i % 2) + 1}
-              >
-                {showSketch ? <SketchSvg sketch={c.sketch} /> : null}
-              </ImageSketch>
-              {unlocked && (
+            <ImageSketch
+              motif={c.motif}
+              aspect={layout === 'image-full' ? '21 / 9' : '4 / 3'}
+              caption={c.caption}
+              frame={c.showFrame}
+              seed={(i % 2) + 1}
+              overlay={unlocked ? (
                 <div className="cms" style={{ position: 'absolute', bottom: 24, right: 24, zIndex: 5 }}>
                   <CmsIconButton size={30} icon={<CmsIcon name="edit" size={15} />} label="Sketch the image" onClick={() => setSketchId(c.id)}
                     style={{ background: 'var(--cms-canvas)', border: '1px solid var(--cms-border)', boxShadow: 'var(--cms-shadow-1)' }} />
                 </div>
-              )}
-            </div>
+              ) : null}
+            >
+              {showSketch ? <SketchSvg sketch={c.sketch} /> : null}
+            </ImageSketch>
           ) : null;
 
           const title = (

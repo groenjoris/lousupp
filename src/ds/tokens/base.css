@@ -36,3 +36,22 @@ body {
 }
 
 ::selection { background: rgba(59, 108, 255, 0.16); }
+
+/* ============================================================
+   CHAPTER LAYOUT — side-by-side + mobile collapse
+   ============================================================ */
+
+/* Desktop: an "image-left" chapter shows the image in the left column
+   (DOM order is always text→image; CSS reorders for the visual). */
+.wf-cols--image-first .wf-col-text { order: 2; }
+.wf-cols--image-first .wf-col-img  { order: 1; }
+
+/* Mobile: every chapter becomes one template — text first, image below. */
+@media (max-width: 760px) {
+  .wf-cols {
+    grid-template-columns: 1fr !important;
+    gap: var(--space-6) !important;
+  }
+  .wf-cols--image-first .wf-col-text { order: 0; }
+  .wf-cols--image-first .wf-col-img  { order: 1; }
+}

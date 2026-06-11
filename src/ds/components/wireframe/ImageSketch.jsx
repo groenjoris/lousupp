@@ -38,6 +38,7 @@ export function ImageSketch({
   aspect = '4 / 3',
   seed = 1,
   frame = false,          // off by default; when on, a light-grey drawn border
+  overlay = null,         // optional node rendered inside the image box (e.g. an edit button)
   className = '',
   style = {},
   children,               // optional: a real <img> once you have one
@@ -47,51 +48,46 @@ export function ImageSketch({
 
   return (
     <figure
-      className={`wf-sketch ${className}`}
-      style={{
-        margin: 0,
-        width: '100%',
-        aspectRatio: aspect,
-        display: 'grid',
-        placeItems: 'center',
-        overflow: 'hidden',
-        position: 'relative',
-        borderRadius: 'var(--wf-radius-lg)',
-        background: 'transparent',
-        ...style,
-      }}
+      className={className}
+      style={{ margin: 0, width: '100%', display: 'block', ...style }}
       {...rest}
     >
-      {frame && (
-        <SketchFrame radius={18} stroke={1.5} color="var(--wf-line-ghost)" fill="transparent" roughness={3} seed={seed} />
-      )}
-      {hasImage ? (
-        children
-      ) : (
-        <svg
-          viewBox="0 0 500 230"
-          preserveAspectRatio="xMidYMid meet"
-          style={{
-            position: 'absolute',
-            inset: '8% 6%',
-            width: '88%',
-            height: '84%',
-            zIndex: 1,
-            color: 'var(--wf-line-ghost)',
-          }}
-          aria-hidden="true"
-        >
-          {MOTIFS[motif] || MOTIFS.abstract}
-        </svg>
-      )}
-      {/* image note — shown for both the motif placeholder and a custom drawing */}
+      {/* the framed image box */}
+      <div
+        className="wf-sketch"
+        style={{
+          position: 'relative',
+          width: '100%',
+          aspectRatio: aspect,
+          display: 'grid',
+          placeItems: 'center',
+          overflow: 'hidden',
+          borderRadius: 'var(--wf-radius-lg)',
+          background: 'transparent',
+        }}
+      >
+        {frame && (
+          <SketchFrame radius={18} stroke={1.5} color="var(--wf-line-ghost)" fill="transparent" roughness={3} seed={seed} />
+        )}
+        {hasImage ? (
+          children
+        ) : (
+          <svg
+            viewBox="0 0 500 230"
+            preserveAspectRatio="xMidYMid meet"
+            style={{ position: 'absolute', inset: '8% 6%', width: '88%', height: '84%', zIndex: 1, color: 'var(--wf-line-ghost)' }}
+            aria-hidden="true"
+          >
+            {MOTIFS[motif] || MOTIFS.abstract}
+          </svg>
+        )}
+        {overlay}
+      </div>
+
+      {/* image note — sits BELOW the image so it never overlaps it */}
       {caption && (
         <figcaption style={{
-          position: 'absolute',
-          left: 0,
-          bottom: 0,
-          zIndex: 2,
-          padding: '6px 12px',
+          marginTop: '8px',
           font: `500 var(--wf-caption)/1.3 var(--font-wf-hand)`,
           color: 'var(--wf-ink-soft)',
           display: 'inline-flex',
