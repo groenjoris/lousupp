@@ -46,25 +46,28 @@ export const PILLARS = [
   },
 ];
 
-// Eight empty chapters with sensible default layouts (alternating, a couple of
-// full / text-only). Copy is intentionally blank — clients fill it via the CMS.
-const LAYOUTS = ['image-right', 'image-left', 'image-full', 'text-only', 'image-right', 'image-left', 'image-below', 'text-only'];
-const MOTIFS = ['abstract', 'landscape', 'portrait', 'abstract', 'landscape', 'portrait', 'abstract', 'landscape'];
+// Eight empty chapters with sensible default layouts (alternating). `template` is
+// always an image layout; `showImage` is the separate text-only gate. Copy is
+// intentionally blank — clients fill it via the CMS.
+const LAYOUTS = ['image-right', 'image-left', 'image-full', 'image-right', 'image-right', 'image-left', 'image-below', 'image-full'];
+const TEXT_ONLY = new Set([3, 7]); // chapters that start without an image
 
 function emptyChapter(i) {
-  const template = LAYOUTS[i];
   return {
     id: `c${i + 1}`,
-    template,
+    template: LAYOUTS[i],
     imageWidth: i % 2 === 0 ? 'two-thirds' : 'half',
     eyebrow: '',
     title: '',
     body: '',
-    showImage: template !== 'text-only',
-    motif: MOTIFS[i],
+    showImage: !TEXT_ONLY.has(i),
+    showFrame: false,
+    motif: 'abstract',      // default placeholder preset
+    sketch: null,           // freehand drawing: { strokes: [[[x,y],...], ...] }
     caption: '',
-    pillarId: null,
-    storyIds: [],
+    primaryCta: '',
+    secondaryCta: '',
+    storyIds: [],           // selected brand-message story ids (may span pillars)
     titleHistory: [],
     bodyHistory: [],
   };

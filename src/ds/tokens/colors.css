@@ -14,7 +14,7 @@
 
 :root {
   /* ---- WIREFRAME · paper (surfaces) ---- */
-  --paper-0:    #fcfcfa;   /* the page itself, warm white */
+  --paper-0:    #ffffff;   /* the page itself, white */
   --paper-1:    #f7f6f2;   /* raised paper / inset fill */
   --paper-2:    #f0eee8;   /* pressed / hover fill */
   --paper-edge: #e7e4dc;   /* faint paper shadow */
@@ -32,10 +32,11 @@
   --wf-paper:        var(--paper-0);
   --wf-paper-raised: var(--paper-1);
   --wf-fill-hover:   var(--paper-2);
-  --wf-ink:          var(--graphite-700);  /* body text & lines */
-  --wf-ink-strong:   var(--graphite-900);  /* headings */
-  --wf-ink-soft:     var(--graphite-500);  /* captions / meta */
-  --wf-ink-faint:    var(--graphite-400);  /* placeholder hand */
+  /* shifted one step lighter so nothing reads as black */
+  --wf-ink:          var(--graphite-500);  /* body text */
+  --wf-ink-strong:   var(--graphite-500);  /* headings & drawn lines — same as body, for a flat wireframe look */
+  --wf-ink-soft:     var(--graphite-400);  /* captions / meta */
+  --wf-ink-faint:    var(--graphite-300);  /* placeholder hand / annotation */
   --wf-line:         var(--graphite-700);  /* drawn stroke */
   --wf-line-soft:    var(--graphite-300);  /* light stroke */
   --wf-line-ghost:   var(--graphite-200);  /* hatching */

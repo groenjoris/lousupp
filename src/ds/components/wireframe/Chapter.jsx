@@ -45,10 +45,21 @@ export function Chapter({
       )}
       {title}
       {body}
+      {toolbar && (
+        <div style={{ justifySelf: 'end' }}>{toolbar}</div>
+      )}
       {actions && (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--space-3)', marginTop: 'var(--space-2)' }}>
           {actions}
         </div>
+      )}
+      {annotation && (
+        <div style={{
+          font: `400 9pt/1.4 var(--font-cms-sans)`,
+          color: 'var(--wf-ink-soft)',
+          letterSpacing: '0.01em',
+          marginTop: 'var(--space-4)',
+        }}>{annotation}</div>
       )}
     </div>
   );
@@ -111,31 +122,6 @@ export function Chapter({
             color: 'var(--wf-line-ghost)',
             pointerEvents: 'none',
           }}>{String(index).padStart(2, '0')}</span>
-        )}
-        {(toolbar || annotation) && (
-          <div style={{
-            position: 'absolute',
-            top: 0,
-            right: 0,
-            zIndex: 5,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-end',
-            gap: 'var(--space-2)',
-            maxWidth: 'min(46%, 360px)',
-            textAlign: 'right',
-          }}>
-            {toolbar}
-            {annotation && (
-              <div aria-hidden="true" style={{
-                font: '500 var(--wf-caption)/1.3 var(--font-wf-hand)',
-                color: 'var(--wf-ink-faint)',
-                transform: 'rotate(-1deg)',
-                transformOrigin: 'right top',
-                pointerEvents: 'none',
-              }}>{annotation}</div>
-            )}
-          </div>
         )}
         {children || inner}
       </div>

@@ -2,9 +2,9 @@ import React from 'react';
 import { SketchLine } from './sketch.jsx';
 
 const LEVELS = {
-  display: { tag: 'h1', size: 'var(--wf-display)', font: 'var(--font-wf-display)', lh: 'var(--wf-lh-display)', weight: 700, color: 'var(--wf-ink-strong)' },
-  h1:      { tag: 'h1', size: 'var(--wf-h1)',      font: 'var(--font-wf-display)', lh: 'var(--wf-lh-head)',    weight: 700, color: 'var(--wf-ink-strong)' },
-  h2:      { tag: 'h2', size: 'var(--wf-h2)',      font: 'var(--font-wf-display)', lh: 'var(--wf-lh-head)',    weight: 600, color: 'var(--wf-ink-strong)' },
+  display: { tag: 'h1', size: 'var(--wf-display)', font: 'var(--font-wf-display)', lh: 'var(--wf-lh-display)', weight: 400, color: 'var(--wf-ink-strong)' },
+  h1:      { tag: 'h1', size: 'var(--wf-h1)',      font: 'var(--font-wf-display)', lh: 'var(--wf-lh-head)',    weight: 400, color: 'var(--wf-ink-strong)' },
+  h2:      { tag: 'h2', size: 'var(--wf-h2)',      font: 'var(--font-wf-display)', lh: 'var(--wf-lh-head)',    weight: 400, color: 'var(--wf-ink-strong)' },
   h3:      { tag: 'h3', size: 'var(--wf-h3)',      font: 'var(--font-wf-hand)',    lh: '1.2',                  weight: 600, color: 'var(--wf-ink-strong)' },
 };
 

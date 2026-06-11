@@ -41,5 +41,5 @@
   --chapter-min-h: 75vh;       /* @kind other */ /* a chapter is ~75% of viewport */
   --page-max:      1180px;     /* @kind spacing */ /* content column for a chapter */
   --page-gutter:   clamp(24px, 5vw, 80px); /* @kind spacing */
-  --chapter-gap:   clamp(40px, 8vh, 120px); /* @kind spacing */
+  --chapter-gap:   clamp(20px, 4vh, 60px); /* @kind spacing */
 }

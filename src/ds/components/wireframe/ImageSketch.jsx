@@ -37,6 +37,7 @@ export function ImageSketch({
   motif = 'abstract',     // 'landscape' | 'portrait' | 'abstract' | 'none'
   aspect = '4 / 3',
   seed = 1,
+  frame = false,          // off by default; when on, a light-grey drawn border
   className = '',
   style = {},
   children,               // optional: a real <img> once you have one
@@ -56,12 +57,14 @@ export function ImageSketch({
         overflow: 'hidden',
         position: 'relative',
         borderRadius: 'var(--wf-radius-lg)',
-        background: 'var(--wf-paper-raised)',
+        background: 'transparent',
         ...style,
       }}
       {...rest}
     >
-      <SketchFrame radius={18} stroke={2} color="var(--wf-line)" fill="transparent" roughness={3} seed={seed} />
+      {frame && (
+        <SketchFrame radius={18} stroke={1.5} color="var(--wf-line-soft)" fill="transparent" roughness={3} seed={seed} />
+      )}
       {hasImage ? (
         children
       ) : (

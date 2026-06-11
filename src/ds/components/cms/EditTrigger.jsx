@@ -7,6 +7,7 @@ import { CmsIcon } from './CmsIcon.jsx';
 export function EditTrigger({
   onClick,
   label = 'Edit',
+  icon = 'edit',     // CmsIcon name
   compact = false,   // icon-only round button
   active = false,
   className = '',
@@ -38,7 +39,7 @@ export function EditTrigger({
       }}
       {...rest}
     >
-      <CmsIcon name="edit" size={14} />
+      <CmsIcon name={icon} size={14} />
       {!compact && <span>{label}</span>}
     </button>
   );
