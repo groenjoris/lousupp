@@ -7219,3 +7219,28 @@ export const PILLARS = DOC.pillars;
 export function makeSeed() {
   return structuredClone(DOC);
 }
+
+/* Empty chapters for a freshly created page — the blank template. */
+const NEW_PAGE_LAYOUTS = ['image-right', 'image-left', 'image-full', 'image-right', 'image-left', 'image-below', 'image-right', 'image-full'];
+
+export function emptyChapters(count = 8) {
+  return Array.from({ length: count }, (_, i) => ({
+    id: `c${i + 1}`,
+    template: NEW_PAGE_LAYOUTS[i % NEW_PAGE_LAYOUTS.length],
+    imageWidth: i % 2 === 0 ? 'two-thirds' : 'half',
+    eyebrow: '',
+    title: '',
+    body: '',
+    showImage: true,
+    showFrame: false,
+    motif: 'abstract',
+    sketch: null,
+    sketchHidden: false,
+    caption: '',
+    primaryCta: '',
+    secondaryCta: '',
+    storyIds: [],
+    titleHistory: [],
+    bodyHistory: [],
+  }));
+}

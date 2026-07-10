@@ -73,9 +73,9 @@ function renderBody(text, tail) {
 /* Selected stories grouped by their pillar, in pillar order. A pillar only
    appears if at least one of its stories is selected (cross-pillar = multiple
    pillars can show). */
-function selectedByPillar(site, c) {
+function selectedByPillar(pillars, c) {
   const ids = new Set(c.storyIds || []);
-  return site.pillars
+  return pillars
     .map((p) => ({ pillar: p, stories: p.stories.filter((s) => ids.has(s.id)) }))
     .filter((g) => g.stories.length > 0);
 }
@@ -114,8 +114,8 @@ function BrandTag({ stories }) {
 }
 
 /* Wireframe annotation: an info marker that reveals the selected substories. */
-function annotationFor(site, c) {
-  const stories = selectedByPillar(site, c).flatMap((g) => g.stories);
+function annotationFor(pillars, c) {
+  const stories = selectedByPillar(pillars, c).flatMap((g) => g.stories);
   if (stories.length === 0) return null;
   return <BrandTag stories={stories} />;
 }
@@ -124,9 +124,28 @@ function annotationFor(site, c) {
 
 function Wordmark() {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8, font: '700 1.9rem/1 var(--font-wf-display)', color: 'var(--wf-ink-strong)' }}>
+    <a href="/" title="All pages" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, font: '700 1.9rem/1 var(--font-wf-display)', color: 'var(--wf-ink-strong)', textDecoration: 'none' }}>
       <span aria-hidden="true" style={{ fontSize: '1.1em' }}>✎</span> lousupp
-    </span>
+    </a>
+  );
+}
+
+function ShareButton() {
+  const [copied, setCopied] = React.useState(false);
+  async function share() {
+    const url = window.location.href;
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      window.prompt('Copy this link', url);
+    }
+  }
+  return (
+    <CmsButton variant="soft" size="sm" onClick={share}>
+      {copied ? 'Copied!' : 'Share this page'}
+    </CmsButton>
   );
 }
 
@@ -136,6 +155,7 @@ function Header({ unlocked, onUnlock, onLock, onSort }) {
       <div style={{ maxWidth: 'var(--page-max)', margin: '0 auto', padding: '18px var(--page-gutter)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 24 }}>
         <Wordmark />
         <div className="cms" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <ShareButton />
           {unlocked && (
             <CmsButton variant="soft" size="sm" iconLeft={<CmsIcon name="grip" size={14} />} onClick={onSort}>
               Sort
@@ -407,8 +427,8 @@ function UnlockModal({ onClose, onUnlocked }) {
 
 /* ---------------- main editor ---------------- */
 
-export default function Editor({ initialSite, initialUnlocked }) {
-  const [site, setSite] = React.useState(initialSite);
+export default function Editor({ initialPage, pillars, initialUnlocked }) {
+  const [page, setPage] = React.useState(initialPage);
   const [unlocked, setUnlocked] = React.useState(initialUnlocked);
   const [editing, setEditing] = React.useState(null);
   const [showUnlock, setShowUnlock] = React.useState(false);
@@ -417,8 +437,8 @@ export default function Editor({ initialSite, initialUnlocked }) {
   const [sortOpen, setSortOpen] = React.useState(false);
   const [saveState, setSaveState] = React.useState('idle'); // idle | saving | saved | error
 
-  const current = site.chapters.find((c) => c.id === editing) || null;
-  const sketchChapter = site.chapters.find((c) => c.id === sketchId) || null;
+  const current = page.chapters.find((c) => c.id === editing) || null;
+  const sketchChapter = page.chapters.find((c) => c.id === sketchId) || null;
 
   // Bring a chapter into view when it's being adjusted. 'nearest' means no jitter
   // if it's already visible; it only scrolls when the chapter is off-screen.
@@ -430,20 +450,20 @@ export default function Editor({ initialSite, initialUnlocked }) {
   }, []);
 
   const update = (id, patch) => {
-    setSite((s) => ({ ...s, chapters: s.chapters.map((c) => (c.id === id ? { ...c, ...patch } : c)) }));
+    setPage((p) => ({ ...p, chapters: p.chapters.map((c) => (c.id === id ? { ...c, ...patch } : c)) }));
     revealChapter(id);
   };
 
   async function save() {
     setSaveState('saving');
     try {
-      const res = await fetch('/api/site', {
-        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(site),
+      const res = await fetch(`/api/pages/${page.id}`, {
+        method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(page),
       });
       if (res.status === 401) { setUnlocked(false); setShowUnlock(true); setSaveState('error'); return; }
       if (!res.ok) { setSaveState('error'); return; }
       const saved = await res.json();
-      setSite(saved); // pick up server-recomputed history
+      setPage(saved); // pick up server-recomputed history
       setSaveState('saved');
       setTimeout(() => setSaveState('idle'), 1500);
     } catch {
@@ -471,18 +491,18 @@ export default function Editor({ initialSite, initialUnlocked }) {
 
   // Titled chapters (the user-facing identifiers) + reorder among their slots,
   // leaving untitled chapters in place.
-  const titledItems = site.chapters.filter((c) => c.title?.trim()).map((c) => ({ id: c.id, title: c.title }));
+  const titledItems = page.chapters.filter((c) => c.title?.trim()).map((c) => ({ id: c.id, title: c.title }));
   function moveTitled(from, to) {
-    setSite((s) => {
+    setPage((p) => {
       const positions = [];
       const titled = [];
-      s.chapters.forEach((c, i) => { if (c.title?.trim()) { positions.push(i); titled.push(c); } });
-      if (to < 0 || to >= titled.length) return s;
+      p.chapters.forEach((c, i) => { if (c.title?.trim()) { positions.push(i); titled.push(c); } });
+      if (to < 0 || to >= titled.length) return p;
       const [m] = titled.splice(from, 1);
       titled.splice(to, 0, m);
-      const next = [...s.chapters];
+      const next = [...p.chapters];
       positions.forEach((pos, k) => { next[pos] = titled[k]; });
-      return { ...s, chapters: next };
+      return { ...p, chapters: next };
     });
   }
   async function closeSort() {
@@ -495,7 +515,7 @@ export default function Editor({ initialSite, initialUnlocked }) {
       <Header unlocked={unlocked} onUnlock={() => setShowUnlock(true)} onLock={lock} onSort={() => setSortOpen(true)} />
 
       <main>
-        {site.chapters.map((c, i) => {
+        {page.chapters.map((c, i) => {
           const headingLevel = i === 0 ? 'display' : 'h1';
           const hasTitle = !!c.title?.trim();
           const hasBody = !!c.body?.trim();
@@ -562,7 +582,7 @@ export default function Editor({ initialSite, initialUnlocked }) {
               body={body}
               image={image}
               actions={actions}
-              annotation={annotationFor(site, c)}
+              annotation={annotationFor(pillars, c)}
             />
           );
         })}
@@ -626,7 +646,7 @@ export default function Editor({ initialSite, initialUnlocked }) {
 
       {messagesOpen && current && (
         <BrandMessages
-          pillars={site.pillars}
+          pillars={pillars}
           selected={current.storyIds}
           onChange={(storyIds) => update(current.id, { storyIds })}
           onClose={() => setMessagesOpen(false)}
