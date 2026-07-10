@@ -50,6 +50,78 @@ function PayBadge({ label, seed }) {
 
 const PAY_METHODS = ['iDEAL', 'PayPal', 'VISA', 'Mastercard', 'Klarna'];
 
+/* ---------------- collapsible info sections ----------------
+   Titles with a hand-drawn "+" that rotates open; one section
+   expanded at a time, the first one by default. Lines starting
+   with "- " render as bullets. */
+
+function sectionLines(body) {
+  const lines = (body || '').split('\n').map((l) => l.trim()).filter(Boolean);
+  const bullets = [];
+  const paras = [];
+  lines.forEach((l) => {
+    const m = /^[-•]\s+(.*)$/.exec(l);
+    if (m) bullets.push(m[1]); else paras.push(l);
+  });
+  return { bullets, paras };
+}
+
+function AccordionSection({ section, open, onToggle, last }) {
+  const { bullets, paras } = sectionLines(section.body);
+  return (
+    <div style={{ borderBottom: last ? 'none' : '1.5px solid var(--wf-line-ghost)' }}>
+      <button
+        onClick={onToggle}
+        aria-expanded={open}
+        style={{
+          width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          gap: 12, padding: '12px 2px', background: 'transparent', border: 'none', cursor: 'pointer',
+        }}
+      >
+        <span style={{ font: '600 1.15rem/1.2 var(--font-wf-hand)', color: 'var(--wf-ink)' }}>{section.title}</span>
+        <span aria-hidden="true" style={{
+          font: '500 1.5rem/1 var(--font-wf-hand)', color: 'var(--wf-ink-soft)',
+          transform: open ? 'rotate(45deg)' : 'rotate(0deg)',
+          transition: 'transform var(--wf-dur) var(--wf-ease)',
+          display: 'inline-block',
+        }}>+</span>
+      </button>
+      {open && (
+        <div style={{ padding: '0 2px 14px', display: 'grid', gap: 'var(--space-2)' }}>
+          {paras.map((p, i) => (
+            <p key={`p${i}`} style={{ margin: 0, font: '400 1.05rem/1.5 var(--font-wf-hand)', color: 'var(--wf-line-soft)' }}>{p}</p>
+          ))}
+          {bullets.length > 0 && (
+            <ul style={{ margin: 0, paddingLeft: '1.2em', display: 'grid', gap: '6px' }}>
+              {bullets.map((b, i) => (
+                <li key={i} style={{ font: '400 1.05rem/1.45 var(--font-wf-hand)', color: 'var(--wf-line-soft)' }}>{b}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function InfoAccordion({ sections }) {
+  const [openId, setOpenId] = React.useState(sections[0]?.id ?? null);
+  if (!sections || sections.length === 0) return null;
+  return (
+    <div style={{ marginTop: 'var(--space-3)', borderTop: '1.5px solid var(--wf-line-ghost)' }}>
+      {sections.map((s, i) => (
+        <AccordionSection
+          key={s.id}
+          section={s}
+          open={openId === s.id}
+          onToggle={() => setOpenId(openId === s.id ? null : s.id)}
+          last={i === sections.length - 1}
+        />
+      ))}
+    </div>
+  );
+}
+
 /* ---------------- the product-detail hero ----------------
    A "shopify" style PDP block, drawn in pencil: media (main image +
    thumbnail gallery) left, buy-info right. Content comes from the
@@ -60,20 +132,26 @@ export default function ProductHero({ chapter: c, image, body, editButton, annot
 
   return (
     <div className="wf-pdp">
-      {/* media column */}
-      <div className="wf-pdp-media" style={{ display: 'grid', gap: 'var(--space-3)' }}>
+      {/* media column: main image, then a quadrant of thumbnails with the
+          collapsible info sections filling the space beside it. */}
+      <div className="wf-pdp-media" style={{ display: 'grid', gap: 'var(--space-4)' }}>
         {image}
-        {/* thumbnail gallery — loose empty sketch boxes */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 'var(--space-3)' }}>
-          {[7, 8, 9].map((s) => (
-            <div key={s} style={{ position: 'relative', aspectRatio: '1 / 1' }}>
-              <SketchFrame radius={12} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={s} />
+        <div className="wf-pdp-sub" style={{ display: 'grid', gridTemplateColumns: 'minmax(150px, 44%) 1fr', gap: 'var(--space-5)', alignItems: 'start' }}>
+          {/* 2×2 thumbnail quadrant of larger sketch boxes */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)' }}>
+            {[7, 8, 9].map((s) => (
+              <div key={s} style={{ position: 'relative', aspectRatio: '1 / 1' }}>
+                <SketchFrame radius={14} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={s} />
+              </div>
+            ))}
+            <div style={{ position: 'relative', aspectRatio: '1 / 1', display: 'grid', placeItems: 'center' }}>
+              <SketchFrame radius={14} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={11} />
+              <span style={{ position: 'relative', font: '500 1.2rem/1 var(--font-wf-hand)', color: 'var(--wf-ink-faint)' }}>+3</span>
             </div>
-          ))}
-          <div style={{ position: 'relative', aspectRatio: '1 / 1', display: 'grid', placeItems: 'center' }}>
-            <SketchFrame radius={12} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={11} />
-            <span style={{ position: 'relative', font: '500 var(--wf-caption)/1 var(--font-wf-hand)', color: 'var(--wf-ink-faint)' }}>+3</span>
           </div>
+
+          {/* collapsible sections beside the quadrant */}
+          <InfoAccordion sections={c.sections || []} />
         </div>
       </div>
 

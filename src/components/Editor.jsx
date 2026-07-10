@@ -280,6 +280,55 @@ function ParagraphField({ value, onChange }) {
   );
 }
 
+/* ---------------- product accordion sections editor ---------------- */
+
+function ProductSectionsEditor({ sections, onChange }) {
+  const list = sections || [];
+  const patch = (i, p) => onChange(list.map((s, k) => (k === i ? { ...s, ...p } : s)));
+  const remove = (i) => onChange(list.filter((_, k) => k !== i));
+  const move = (i, dir) => {
+    const j = i + dir;
+    if (j < 0 || j >= list.length) return;
+    const next = [...list];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  };
+  const add = () => onChange([...list, { id: `sec-${Date.now().toString(36)}`, title: 'New section', body: '' }]);
+
+  const taStyle = {
+    width: '100%', boxSizing: 'border-box', padding: '8px 10px',
+    font: 'var(--cms-weight-regular) var(--cms-body)/1.5 var(--font-cms-sans)',
+    color: 'var(--cms-ink)', background: 'var(--cms-canvas)',
+    border: '1px solid var(--cms-border)', borderRadius: 'var(--cms-radius)', resize: 'vertical', outline: 'none',
+  };
+
+  return (
+    <div className="cms" style={{ display: 'grid', gap: '10px' }}>
+      <span style={{ font: 'var(--cms-weight-medium) var(--cms-label)/1.2 var(--font-cms-sans)', color: 'var(--cms-ink-soft)' }}>
+        Info sections (accordion)
+      </span>
+      {list.map((s, i) => (
+        <div key={s.id} style={{ border: '1px solid var(--cms-border)', borderRadius: 'var(--cms-radius)', background: 'var(--cms-surface)', padding: '10px', display: 'grid', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <input
+              value={s.title}
+              onChange={(e) => patch(i, { title: e.target.value })}
+              placeholder="Section title"
+              className="cms-field"
+              style={{ flex: 1, boxSizing: 'border-box', padding: '6px 10px', font: 'var(--cms-weight-medium) var(--cms-body)/1.4 var(--font-cms-sans)', color: 'var(--cms-ink)', background: 'var(--cms-canvas)', border: '1px solid var(--cms-border)', borderRadius: 'var(--cms-radius)', outline: 'none' }}
+            />
+            <CmsIconButton icon={<CmsIcon name="chevronDown" size={15} style={{ transform: 'rotate(180deg)' }} />} label="Move up" disabled={i === 0} onClick={() => move(i, -1)} style={{ opacity: i === 0 ? 0.4 : 1 }} />
+            <CmsIconButton icon={<CmsIcon name="chevronDown" size={15} />} label="Move down" disabled={i === list.length - 1} onClick={() => move(i, 1)} style={{ opacity: i === list.length - 1 ? 0.4 : 1 }} />
+            <CmsIconButton icon={<CmsIcon name="trash" size={15} />} label="Remove section" onClick={() => remove(i)} />
+          </div>
+          <textarea value={s.body} onChange={(e) => patch(i, { body: e.target.value })} rows={4} placeholder="Content — start a line with “- ” for a bullet" style={taStyle} />
+        </div>
+      ))}
+      <CmsButton variant="soft" size="sm" iconLeft={<CmsIcon name="plus" size={14} />} onClick={add} style={{ justifySelf: 'start' }}>Add section</CmsButton>
+    </div>
+  );
+}
+
 /* ---------------- brand messages (pop-up) ---------------- */
 
 /* A parent checkbox that shows the tri-state of its children. It can't be
@@ -647,6 +696,10 @@ export default function Editor({ initialPage, pillars, initialUnlocked }) {
 
               <CmsField label={current.kind === 'product' ? 'Buy button' : 'Primary button'} value={current.primaryCta || ''} onChange={(e) => update(current.id, { primaryCta: e.target.value })} placeholder={current.kind === 'product' ? 'Add to cart' : 'e.g. Shop now'} hint={current.kind === 'product' ? undefined : 'Leave empty to hide.'} />
               <CmsField label="Secondary button" value={current.secondaryCta || ''} onChange={(e) => update(current.id, { secondaryCta: e.target.value })} placeholder="e.g. Learn more" hint="Leave empty to hide." />
+
+              {current.kind === 'product' && (
+                <ProductSectionsEditor sections={current.sections || []} onChange={(sections) => update(current.id, { sections })} />
+              )}
 
               {current.kind !== 'product' && (
                 <CmsToggle label="Show image" hint={current.showImage ? 'Layout, width & frame live in the image panel — the pencil on the image' : 'Off makes a text-only chapter'} checked={current.showImage} onChange={(v) => update(current.id, { showImage: v })} />
