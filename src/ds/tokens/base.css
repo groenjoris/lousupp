@@ -55,3 +55,15 @@ body {
   .wf-cols--image-first .wf-col-text { order: 0; }
   .wf-cols--image-first .wf-col-img  { order: 1; }
 }
+
+/* Product-detail hero (the "shopify" block): media left, buy-info right.
+   On mobile it stacks with the product image FIRST (shop convention). */
+.wf-pdp {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: clamp(28px, 5vw, 72px);
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .wf-pdp { grid-template-columns: 1fr; }
+}

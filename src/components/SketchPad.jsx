@@ -170,9 +170,13 @@ export function SketchPad({ chapter, onChange, onCommit, onCancel }) {
             />
           )}
           <CmsSegmented label="Preset" options={PRESETS} value={chapter.motif} onChange={(v) => onChange({ motif: v, sketchHidden: true })} />
-          <CmsSegmented iconsOnly label="Image position" options={POSITIONS} value={imgLayout(chapter)} onChange={(v) => onChange({ template: v })} />
-          {(imgLayout(chapter) === 'image-left' || imgLayout(chapter) === 'image-right') && (
-            <CmsSegmented label="Image width" options={[{ value: 'half', label: 'Half' }, { value: 'two-thirds', label: 'Two-thirds' }]} value={chapter.imageWidth} onChange={(v) => onChange({ imageWidth: v })} />
+          {chapter.kind !== 'product' && (
+            <>
+              <CmsSegmented iconsOnly label="Image position" options={POSITIONS} value={imgLayout(chapter)} onChange={(v) => onChange({ template: v })} />
+              {(imgLayout(chapter) === 'image-left' || imgLayout(chapter) === 'image-right') && (
+                <CmsSegmented label="Image width" options={[{ value: 'half', label: 'Half' }, { value: 'two-thirds', label: 'Two-thirds' }]} value={chapter.imageWidth} onChange={(v) => onChange({ imageWidth: v })} />
+              )}
+            </>
           )}
           <CmsToggle label="Image frame" hint="Off by default — adds a light pencil border" checked={!!chapter.showFrame} onChange={(v) => onChange({ showFrame: v })} />
           <CmsField label="Image note" value={chapter.caption || ''} onChange={(e) => onChange({ caption: e.target.value })} hint="What the picture will show" />

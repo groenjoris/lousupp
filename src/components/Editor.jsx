@@ -7,6 +7,7 @@ import {
   CmsIconButton, CmsIcon,
 } from '@/ds';
 import { SketchPad, SketchSvg } from './SketchPad';
+import ProductHero from './ProductHero';
 
 /* ---------------- constants ---------------- */
 
@@ -516,6 +517,7 @@ export default function Editor({ initialPage, pillars, initialUnlocked }) {
 
       <main>
         {page.chapters.map((c, i) => {
+          const isProduct = c.kind === 'product';
           const headingLevel = i === 0 ? 'display' : 'h1';
           const hasTitle = !!c.title?.trim();
           const hasBody = !!c.body?.trim();
@@ -527,7 +529,7 @@ export default function Editor({ initialPage, pillars, initialUnlocked }) {
           const image = c.showImage ? (
             <ImageSketch
               motif={c.motif}
-              aspect={layout === 'image-full' ? '21 / 9' : '4 / 3'}
+              aspect={isProduct ? '4 / 5' : layout === 'image-full' ? '21 / 9' : '4 / 3'}
               caption={c.caption}
               frame={c.showFrame}
               seed={(i % 2) + 1}
@@ -563,6 +565,22 @@ export default function Editor({ initialPage, pillars, initialUnlocked }) {
               {editBtn ? <span style={{ display: 'inline-flex', verticalAlign: 'middle', marginLeft: '10px' }}>{editBtn}</span> : null}
             </SketchText>
           );
+
+          if (isProduct) {
+            return (
+              <section key={c.id} id={`chapter-${c.id}`} style={{ padding: 'var(--chapter-gap) var(--page-gutter)' }}>
+                <div style={{ width: '100%', maxWidth: 'var(--page-max)', margin: '0 auto' }}>
+                  <ProductHero
+                    chapter={c}
+                    image={image}
+                    body={body}
+                    editButton={null /* edit button is inline in the summary via renderBody */}
+                    annotation={annotationFor(pillars, c)}
+                  />
+                </div>
+              </section>
+            );
+          }
 
           const actions = (c.primaryCta || c.secondaryCta) ? (
             <>
@@ -608,16 +626,31 @@ export default function Editor({ initialPage, pillars, initialUnlocked }) {
             >
               <CmsField label="Eyebrow" value={current.eyebrow || ''} onChange={(e) => update(current.id, { eyebrow: e.target.value })} placeholder="small line above the title" hint="Optional — a quiet label above the title." />
 
-              <CmsField label="Title" value={current.title} onChange={(e) => update(current.id, { title: e.target.value })} placeholder="Chapter title" />
+              <CmsField label={current.kind === 'product' ? 'Product name' : 'Title'} value={current.title} onChange={(e) => update(current.id, { title: e.target.value })} placeholder={current.kind === 'product' ? 'Product name' : 'Chapter title'} />
               <FieldHistory history={current.titleHistory} onRestore={(v) => update(current.id, { title: v })} />
 
               <ParagraphField value={current.body} onChange={(v) => update(current.id, { body: v })} />
               <FieldHistory history={current.bodyHistory} onRestore={(v) => update(current.id, { body: v })} />
 
-              <CmsField label="Primary button" value={current.primaryCta || ''} onChange={(e) => update(current.id, { primaryCta: e.target.value })} placeholder="e.g. Shop now" hint="Leave empty to hide." />
+              {current.kind === 'product' && (
+                <>
+                  <div className="cms" style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '10px' }}>
+                    <CmsField label="Price" value={current.price || ''} onChange={(e) => update(current.id, { price: e.target.value })} placeholder="€ 39" />
+                    <CmsField label="Price note" value={current.priceNote || ''} onChange={(e) => update(current.id, { priceNote: e.target.value })} placeholder="30-day supply · free shipping" />
+                  </div>
+                  <div className="cms" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                    <CmsField label="Rating (0–5)" type="number" min="0" max="5" step="0.1" value={current.rating ?? ''} onChange={(e) => update(current.id, { rating: e.target.value === '' ? null : Number(e.target.value) })} />
+                    <CmsField label="Review count" type="number" min="0" value={current.reviewCount ?? ''} onChange={(e) => update(current.id, { reviewCount: e.target.value === '' ? null : Number(e.target.value) })} />
+                  </div>
+                </>
+              )}
+
+              <CmsField label={current.kind === 'product' ? 'Buy button' : 'Primary button'} value={current.primaryCta || ''} onChange={(e) => update(current.id, { primaryCta: e.target.value })} placeholder={current.kind === 'product' ? 'Add to cart' : 'e.g. Shop now'} hint={current.kind === 'product' ? undefined : 'Leave empty to hide.'} />
               <CmsField label="Secondary button" value={current.secondaryCta || ''} onChange={(e) => update(current.id, { secondaryCta: e.target.value })} placeholder="e.g. Learn more" hint="Leave empty to hide." />
 
-              <CmsToggle label="Show image" hint={current.showImage ? 'Layout, width & frame live in the image panel — the pencil on the image' : 'Off makes a text-only chapter'} checked={current.showImage} onChange={(v) => update(current.id, { showImage: v })} />
+              {current.kind !== 'product' && (
+                <CmsToggle label="Show image" hint={current.showImage ? 'Layout, width & frame live in the image panel — the pencil on the image' : 'Off makes a text-only chapter'} checked={current.showImage} onChange={(v) => update(current.id, { showImage: v })} />
+              )}
 
               <div className="cms" style={{ display: 'grid', gap: '6px' }}>
                 <span style={{ font: 'var(--cms-weight-medium) var(--cms-label)/1.2 var(--font-cms-sans)', color: 'var(--cms-ink-soft)' }}>Brand messages</span>
