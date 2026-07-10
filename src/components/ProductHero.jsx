@@ -132,26 +132,19 @@ export default function ProductHero({ chapter: c, image, body, editButton, annot
 
   return (
     <div className="wf-pdp">
-      {/* media column: main image, then a quadrant of thumbnails with the
-          collapsible info sections filling the space beside it. */}
+      {/* media column: main image, then a full-width 2×2 quadrant of thumbnails */}
       <div className="wf-pdp-media" style={{ display: 'grid', gap: 'var(--space-4)' }}>
         {image}
-        <div className="wf-pdp-sub" style={{ display: 'grid', gridTemplateColumns: 'minmax(150px, 44%) 1fr', gap: 'var(--space-5)', alignItems: 'start' }}>
-          {/* 2×2 thumbnail quadrant of larger sketch boxes */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)' }}>
-            {[7, 8, 9].map((s) => (
-              <div key={s} style={{ position: 'relative', aspectRatio: '1 / 1' }}>
-                <SketchFrame radius={14} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={s} />
-              </div>
-            ))}
-            <div style={{ position: 'relative', aspectRatio: '1 / 1', display: 'grid', placeItems: 'center' }}>
-              <SketchFrame radius={14} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={11} />
-              <span style={{ position: 'relative', font: '500 1.2rem/1 var(--font-wf-hand)', color: 'var(--wf-ink-faint)' }}>+3</span>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 'var(--space-3)' }}>
+          {[7, 8, 9].map((s) => (
+            <div key={s} style={{ position: 'relative', aspectRatio: '1 / 1' }}>
+              <SketchFrame radius={14} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={s} />
             </div>
+          ))}
+          <div style={{ position: 'relative', aspectRatio: '1 / 1', display: 'grid', placeItems: 'center' }}>
+            <SketchFrame radius={14} stroke={1.25} color="var(--wf-line-ghost)" roughness={2.4} seed={11} />
+            <span style={{ position: 'relative', font: '500 1.2rem/1 var(--font-wf-hand)', color: 'var(--wf-ink-faint)' }}>+3</span>
           </div>
-
-          {/* collapsible sections beside the quadrant */}
-          <InfoAccordion sections={c.sections || []} />
         </div>
       </div>
 
@@ -198,8 +191,11 @@ export default function ProductHero({ chapter: c, image, body, editButton, annot
 
         {/* trust line */}
         <SketchText variant="caption" style={{ color: 'var(--wf-ink-soft)' }}>
-          ✓ 30-day money-back guarantee&nbsp;&nbsp;·&nbsp;&nbsp;✓ free shipping&nbsp;&nbsp;·&nbsp;&nbsp;✓ pause or cancel anytime
+          ✓ 60-night money-back guarantee&nbsp;&nbsp;·&nbsp;&nbsp;✓ free shipping in Europe&nbsp;&nbsp;·&nbsp;&nbsp;✓ third-party tested
         </SketchText>
+
+        {/* collapsible info sections */}
+        <InfoAccordion sections={c.sections || []} />
 
         {editButton && <div style={{ justifySelf: 'end' }}>{editButton}</div>}
         {annotation && <div style={{ marginTop: 'var(--space-2)' }}>{annotation}</div>}

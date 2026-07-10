@@ -67,7 +67,3 @@ body {
 @media (max-width: 760px) {
   .wf-pdp { grid-template-columns: 1fr; }
 }
-/* Below the main image: thumbnail quadrant + collapsible sections. */
-@media (max-width: 760px) {
-  .wf-pdp-sub { grid-template-columns: 1fr !important; }
-}
